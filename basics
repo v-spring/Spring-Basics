@@ -1,0 +1,102 @@
+********************************************************SPRING_CORE********************************************************************
+
+* Main Objective is to make code loosely coupled and main use is Dependency Injection
+* IOC container:- here we are taking control from the class that needs dependency, and giving control to Spring Container(IOC container) to inject dependency.
+* With the help of Spring , we can get rid of many boilder plate code in app.
+* ApplicationContext(Eager Bean Loading) is where beans are created,configured and managed based on metadata info provide either by XML based configuration or java annotaion based config ,it is extended version of BeanFactory(Lazy Bean Loading).
+* Dependency Injection:
+	- Setter Injection (for Optional dependencies)
+	Setter injection avoids the circular dependency between two objects i.e. If object A and B are dependent on each other i.e. A depends on B and vice-versa. Spring throws the ObjectCurrentlyInCreationException while creating the objects of A and B because the A object cannot be created until the B object is created and vice-versa. So spring framework resolve the circular dependencies through the Setter Injection
+	- Constructor Injection (for Madatory dependencies)
+* Autowire  byType(default) and ByName:
+	- When More than one beans are present of same type, we can use @Primary or change reference variable name to camel case class name (Autowire by Name).
+	- when both @primary and camel case ref variable name is present @Primary taken as priority.
+
+* Scope:
+    - singletone(default)-> One instance per Application context
+	- When bean using dependency is prototype and dependency bean is singletone =>works fine
+	- When bean using dependency is singletone and dependency bean is prototype 
+		=> In this case each time we call dependency bean from bean using dependency, we get same object all the time(singletone behavior). but we configures as  prototype. In such cases,we need to configure proxy here instead of giving direct dependency bean object for bean object using dependency we will give proxy. Proxy will make sure it gets new dependency bean object for each call from bean object using dependency. In this case, during dependency injection proxy bean gets autowired to bean using dependency instead of direct dependency bean object.
+	 Ex:- @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode=ScopedProxyMode.TARGET_CLASS)
+	 
+* For logging use sl4j:- private static final Logger LOGGER=LoggerFactory.getLogger(App.class);
+
+********************************************************SPRING_CORE***************************************************************************************
+
+********************************************************SPRING_BOOT***************************************************************************************
+FEATURES:
+* Best for developing microServices quickly over large monolythic apps.
+* Quick starter projects with Auto Configuration, Lets say we have to create web app using Spring-MVC:
+	- we need to have spring-core, spring-context,Some logging framework,  have to configure dispatcher servlet, view resolver ...so on..
+	- with spring boot it becomes easy, just add starter called Spring-boot-starter-web. 
+	- Simillarly for JPA just add starter called Spring-boot-starter-JPA. Lot of Auto configuration we will get like hibernate..etc
+* Embedded servers: Tomcat, jetty or Undertow
+	=> previously we have to created physical VM/Linux box, install JAVA, install web server(tomcat/websphere) and then take app WAR file and deploy it.
+	=> with spring boot, we can package server along with app JAR. no need to install in linux box.
+* With Spring boot Actuator,we can retrieve metrics or the health of our application. like number of times service is called, app is up/down.So on..
+* Spring boot supports for Externalixed configuration, like for dev/UAT/PROD we can use profiles concept.
+* Before Spring boot, we have decide which dependency for which type of app,and compatable versions of each dependency.
+
+
+********************************************************SPRING_BOOT***************************************************************************************
+
+********************************************************SPRING_MVC***************************************************************************************
+* One of the important use of Spring-MVC is seperation of concerns, VIEW,CONTROLLER,MODEL
+
+********************************************************SPRING_MVC***************************************************************************************
+
+
+
+
+
+
+********************************************************SPRING_ACTUATOR***************************************************************************************
+* This brings a lot of monitoring around our application. It reads metadata about application
+
+********************************************************SPRING_ACTUATOR***************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+********************************************************SPRING_DEV_TOOLS***************************************************************************************
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+</dependency>
+
+* Very very usefull in SPRING-WEB-MVC
+*Features:
+	-Automatic Restart( time taken is very less compared to manual re-start server)
+		->In development mode whenever we change any file, generally we need to restart the server and refresh the browser to get updated data. Spring boot developer tools have automatized these two tasks. To refresh browser automatically we need to add extension RemoteLiveReload for chrome, install LiveReload for IE.
+			=>Disabling Restart:
+				spring.devtools.restart.enabled = false  in application.properties file or 
+				include :-	System.setProperty("spring.devtools.restart.enabled", "false");  
+				SpringApplication.run(Application.class, args);
+Though files directory is not lying in the classpath, it still can take the advantage of automatic restart. To achieve it, spring boot provides property that needs to configure in application properties file as follows.
+application.properties
+spring.devtools.restart.additional-paths = files 					
+			
+	-Live Reload
+		->Spring boot developer tools have a feature that will auto restart the server and refresh the page on browser whenever a file on classpath is modified. Once we have configured developer tools in our maven project in eclipse after changing file, when we save, the auto restart is fired.
+
+The properties are configured in application.properties file.
+spring.devtools.restart.additional-paths: Add paths for auto restart that are not in classpath.
+spring.devtools.restart.trigger-file: Specify a trigger file name and now developer tools watch for restart check only when if trigger file is modified.
+spring.devtools.restart.exclude: Specify the path to exclude the files from full auto restart.
+spring.devtools.restart.additional-exclude: Specify the additional path that will be excluded from full auto restart keeping the default settings.
+spring.devtools.restart.enabled: If the value is false then developer tools will stop watching the file for auto restart.
+
+********************************************************SPRING_DEV_TOOLS***************************************************************************************
