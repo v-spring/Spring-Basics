@@ -1,0 +1,41 @@
+├────────────┼─────────────────────────────────────────────────────
+│ @Component │ generic stereotype for any Spring-managed component 		
+│ @Repository│ stereotype for persistence layer   //Db related exceptions are handled/translated                 
+│ @Service   │ stereotype for service layer                        
+│ @Controller│ stereotype for presentation layer (spring-mvc)      
+
+
+* @SpringBootApplication : Automatically detects config class, and component scan value will be equal to pacakge name of the class where this annotation is used.
+automatically detects application.propertis file. It has @EnableAutoConfiguration anntaion.
+	-Basically Spring boot looks for Frameworks available on classpath and existing configuration for application. Spring boot provides basic configuration needed to congigure the application with these frameworks.
+
+* @Configuration:- It is not mandatory, if we have any beans defiend in config class ,then mark the class with this annotaion.
+* @ComponentScan:- scans for beans / if no pacakge name is specified it considers the package name of the class where it is used
+* @Autowired - dependency injection
+* @Primary: When more than one bean of same type is present , class marked with @Primary is considered for autowiring.(only one @Primary should be present of one type)
+* @Qualifier: it is used with @Autowired when multiple beans of sam etype are present, qualified name is used for autowiring byName.
+* @Scope : singleton, prototype, request, session, global
+*Lazy - default, Spring “application context” eagerly creates and initializes all ‘singleton scoped‘ beans during application startup itself. we can make lazy.
+*Eager - this is default
+ - both dependent bean and dependency bean should be lazy , if either of one is lazy then it wont work.
+ - when dependent bean is lazy and dependency bean is eager => works fine
+ - when dependent bean is eager and dependency bean is lazy => both beans will be created eagerly since to create dependent bean object dependency bean is requied.
+ - we can used at config class level, to mark all beans defined to load lazily.
+
+Note:- When using @Autowired directly, the injection method is byType. In other words, the container sees and tries to find a bean of type in the ApplicationContext to inject.So the beans being @Lazy doesn't change anything. They will still have to be created in order to be injected.In this case, we must use the lazy annotation at both places:
+The bean definition which you want to lazy load
+The place it is injected along with @Autowired annotation
+
+* @PostConstruct: if we want to intialize the content of the bean as soon as the dependency are avialable.
+* @PreDestroy: when bean instance is removed from context by the container.
+
+*@PropertyResource("classpath:<file_Name>") => 
+* file placed in src/main/resources
+* @Value("${property_key_name}") -Values are stored from property file like key_value pair. use @Value to get Value from key in propery file.
+* for multiple files mapping in same class, either use @PropertyResources else use @PropertyResource twice.
+
+
+**********CDI Annotaions**********************
+CDI (Contexts and Dependency Injection) is a standard dependency injection framework included in Java EE 6 and higher.
+* @Inject => simillar to @Autowire
+* @Named => simillar to @Component
